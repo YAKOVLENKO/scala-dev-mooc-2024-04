@@ -14,9 +14,16 @@ object task_collections {
    * List("Оказывается", "," "звук", "КЛАВИШЬ", "печатной", "машинки", "не", "стал", "ограничивающим", "фактором")
    * HINT: Тут удобно использовать collect и zipWithIndex
    *
-   * **/
+   * * */
   def capitalizeIgnoringASCII(text: List[String]): List[String] = {
-    List.empty
+    text match {
+      case ::(head, next) =>
+        head :: next.map { s =>
+          if (isASCIIString(s)) s.toUpperCase()
+          else s.toLowerCase()
+        }
+      case Nil => Nil
+    }
   }
 
   /**
@@ -27,9 +34,21 @@ object task_collections {
    * Реализуйте метод который цифровые значения в строке заменяет на числа: 1 -> one, 2 -> two
    *
    * HINT: Для всех возможных комбинаций чисел стоит использовать Map
-   * **/
+   * * */
   def numbersToNumericString(text: String): String = {
-    ""
+    val ToWords = Map(
+      '1' -> "one",
+      '2' -> "two",
+      '3' -> "three",
+      '4' -> "four",
+      '5' -> "five",
+      '6' -> "six",
+      '7' -> "seven",
+      '8' -> "eight",
+      '9' -> "nine",
+      '0' -> "zero")
+
+    text.map { c => if (c.isDigit) ToWords.getOrElse(c, c) else c }.mkString
   }
 
   /**
@@ -38,24 +57,27 @@ object task_collections {
    * Базы данных дилеров содержат тысячи и больше записей. Нет гарантии что записи уникальные и не имеют повторений
    * HINT: Set
    * HINT2: Iterable стоит изменить
-   * **/
+   * * */
 
-  case class Auto(mark: String, model: String)
+  case class Auto(mark: String,
+                  model: String)
 
   /**
    * Хотим узнать какие машины можно обслужить учитывая этих двух дилеров
    * Реализуйте метод который примет две коллекции (два источника) и вернёт объединенный список уникальный значений
-   **/
-  def intersectionAuto(dealerOne: Iterable[Auto], dealerTwo: Iterable[Auto]): Iterable[Auto] = {
-    Iterable.empty
+   * */
+  def intersectionAuto(dealerOne: Iterable[Auto],
+                       dealerTwo: Iterable[Auto]): Set[Auto] = {
+    dealerOne.toSet ++ dealerTwo.toSet
   }
 
   /**
    * Хотим узнать какие машины обслуживается в первом дилеромском центре, но не обслуживаются во втором
    * Реализуйте метод который примет две коллекции (два источника)
    * и вернёт уникальный список машин обслуживающихся в первом дилерском центре и не обслуживающимся во втором
-   **/
-  def filterAllLeftDealerAutoWithoutRight(dealerOne: Iterable[Auto], dealerTwo: Iterable[Auto]): Iterable[Auto] = {
-    Iterable.empty
+   * */
+  def filterAllLeftDealerAutoWithoutRight(dealerOne: Iterable[Auto],
+                                          dealerTwo: Iterable[Auto]): Set[Auto] = {
+    dealerOne.toSet.diff(dealerTwo.toSet)
   }
 }
